@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Star Wars RPG Game</title>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+
+<link src="assets/css/reset.css"></link>
+<link src="assets/css/style.css"></link>	
+</head>
+<body background="assets/images/background_720.jpg">
+<h1>Star Wars RPG!</h1>
+
+<div id="char_1" style="height: 200px; width: 200px; background-color: blue;
+	margin-bottom: 15px; ">
+     Obi-Won Kenobi
+     <img src="assets/images/slack-imgs-2.jpg" width="100px" height="100px">
+</div>
+<div id="char_2" style="height: 200px; width: 200px; background-color: green;">
+     Luke Skywalker
+     <img src="assets/images/slack-imgs-1.jpg" width="100px" height="100px">
+</div>     
+<script >
+	$(document).ready(function(){
+
+
+
+		$("#char_1").on("click",function(){
+			alert("You chose Obi-Won");
+		})
+
+
+			$("#char_2").on("click",function(){
+			alert("You chose Luke Skywalker");
+		})
+
+
+
+	})
+
+
+
+</script>
+</body>
+</html>
