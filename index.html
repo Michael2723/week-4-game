@@ -5,44 +5,262 @@
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
+<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
 <link src="assets/css/reset.css"></link>
 <link src="assets/css/style.css"></link>	
+
+
+	
+<style type="text/css">
+	
+
+
+
+</style>
+
 </head>
-<body background="assets/images/background_720.jpg">
+<body background="assets/images/720.png">
 <h1>Star Wars RPG!</h1>
 
-<div id="char_1" style="height: 200px; width: 200px; background-color: blue;
-	margin-bottom: 15px; ">
+<div id="char_1" style="height: 140px; width: 120px; background-color: blue;
+	margin-right: 15px; float: left; padding-left:15px;">
      Obi-Won Kenobi
      <img src="assets/images/slack-imgs-2.jpg" width="100px" height="100px">
+     <div class="points">120</div>
 </div>
-<div id="char_2" style="height: 200px; width: 200px; background-color: green;">
+<div id="char_2" style="height: 140px; width: 120px; background-color: green; margin-right: 15px; float: left; padding-left:15px;">
      Luke Skywalker
      <img src="assets/images/slack-imgs-1.jpg" width="100px" height="100px">
+     <div class="points">100</div>
 </div>   
+<div id="char_3" style="height: 140px; width: 120px; background-color: red;
+	margin-right: 15px; float: left; padding-left:15px;">
+     Darth Sidious
+     
+     <img src="assets/images/slack-imgs.jpg" width="100px" height="100px">
+     <div class="points">100</div>
+</div>
+<div id="char_3" style="height: 140px; width: 120px; background-color: red;
+	margin-right: 15px; float: left; padding-left:15px;">
+     Darth Maul
 
-<button type="button" style="margin-top: 10px;">Attack</button>  
+     <img src="assets/images/slack-imgs-3.jpg" width="100px" height="100px">
+	 <div class="points">100</div>
+
+</div>
+<!-- <script src="assets/javascript/game.js"></script> -->
+
+<h2 style="clear:both;">Your Character</h2>
+<div id="your-character-container"></div>
+<h2 style="clear:both;">Enemies Available to Attack</h2>
+<div id="enemies-available"></div>
+<h2 style="clear:both;">Fight Section</h2>
+<div id="fight-section" ></div>
+<h2 style="clear:both;">Defender</h2>
+<div id="defender-area"></div>
+<div id="updated-display"></div>
+
+<button class="btn" type="button" style="margin-top: 10px;">Attack</button>
+<div id="game-state"></div>
+<button class="btn" id="end" type="button" style="margin-top: 10px;">Restart</button>  
 
 <script >
-	$(document).ready(function(){
+
+var ObiWon = {
+    name: "Obi-Won Kenobi",
+    points: 10,
+    offensive: 0,
+    defensive: 0
+};
+
+var LukeSkywalker = {
+    name: "Luke Skywalker",
+    points: 150,
+    offensive: 25,
+    defensive: 25
+};
+
+var DarthSidious = {
+    name: "Darth Sidious",
+    points: 150,
+    offensive: 25,
+    defensive: 25
+};
+
+var DarthMaul = {
+    name: "Darth Maul",
+    points: 150,
+    offensive: 100,
+    defensive: 100
+};
+
+var yourCharacter;
+var defender;
+
+
+$(document).ready(function(){
+
+	   $("char_1").on("click",function(){
+		   	console.log("You chose Obi-Won");
+		   	yourCharacter = ObiWon;
+		   	console.log(ObiWon);
+			$(this).remove().appendTo("#your-character-container");
+	        $("#char_2").remove().appendTo("#enemies-available");
+	        $("#char_3").remove().appendTo("#enemies-available");
+	        $("#char_4").remove().appendTo("#enemies-available");
+        })
+
+        $("#char_2").on("click",function(){
+            console.log("You chose Luke Skywalker");
+            yourCharacter = LukeSkywalker;
+            $(this).remove().appendTo("#your-character-container");
+            $("#char_1").remove().appendTo("#enemies-available");
+            $("#char_3").remove().appendTo("#enemies-available");
+            $("#char_4").remove().appendTo("#enemies-available");
+        })
+
+        $("#char_3").on("click",function(){
+            console.log("You chose Darth Sidious");
+            yourCharacter = DarthSidious;
+            $(this).remove().appendTo("#your-character-container");
+            $("#char_1").remove().appendTo("#enemies-available");
+            $("#char_2").remove().appendTo("#enemies-available");
+            $("#char_4").remove().appendTo("#enemies-available");
+        })
+
+        $("#char_4").on("click",function(){
+        	alert("you clicked on Darth Maul");
+            console.log("You chose Darth Maul");
+            yourCharacter = DarthMaul;
+            $(this).remove().appendTo("#your-character-container");
+            $("#char_1").remove().appendTo("#enemies-available");
+            $("#char_2").remove().appendTo("#enemies-available");
+            $("#char_3").remove().appendTo("#enemies-available");
+        })
+
+        $("#enemies-available").on("click", "div", function(){
+            $(this).remove().appendTo("#defender-area");
+            var defenderName = $(this).attr("data-character");
+            if(defenderName === "Darth Sidious"){
+                defender = DarthSidious;
+                console.log(defender.points);
+            }
+            if(defenderName === "Darth Maul"){
+                defender = DarthMaul;
+                console.log(defender);
+            }
+            if(defenderName === "Obi-Won Kenobi"){
+                defender = ObiWon;
+                console.log(defender);
+            }
+            if(defenderName === "Luke Skywalker"){
+                defender = LukeSkywalker;
+                console.log(defender);
+            }
+        })
+
+
+        var counter = 1;
+        var defenderLives = 0;
+
+        $(".btn").on("click", function(){
 
 
 
-		$("#char_1").on("click",function(){
-			alert("You chose Obi-Won");
-		})
+            // yourCharacter.points -= defender.defensive;
+            defender.points -= (yourCharacter.offensive * counter);
+            var message = "You attacked" + defender.name + "for" + (yourCharacter.offensive * counter) + "damage" + "<br>"
+                            + defender.name + "attacked you back for " + defender.defensive + "damage";
+            $("#updated-display").html(message); 
+            
+            counter++;
+            console.log("counter: " + counter);
 
 
-			$("#char_2").on("click",function(){
-			alert("You chose Luke Skywalker");
-		})
+            if(yourCharacter.name === $("#char_1").attr("data-character")){
+                $("#char_1 .points").html(yourCharacter.points);
+                console.log("char 1 fired;");
+                if(yourCharacter.points < 0){
+                    $("#char_1").remove();
+                }
+            }
 
 
 
-	})
+            if(yourCharacter.name === $("#char_2").attr("data-character")){
+                $("#char_2 .points").html(yourCharacter.points);
+                console.log("char 2 fired;");
+                if(yourCharacter.points < 0){
+                    $("#char_2").remove();
+                }
+
+            }
+
+            if(yourCharacter.name === $("#char_3").attr("data-character")){
+                $("#char_3 .points").html(yourCharacter.points);
+                console.log("char 3 fired;");
+                if(yourCharacter.points < 0){
+                    $("#char_3").remove();
+                }
+            }
+
+            if(yourCharacter.name === $("#char_4").attr("data-character")){
+                $("#char_4 .points").html(yourCharacter.points);
+                console.log("char 4 fired;");
+                if(yourCharacter.points < 0){
+                    $("#char_4").remove();
+                }                
+            }
 
 
+            if(defender.name === $("#char_1").attr("data-character")){
+                $("#char_1 .points").html(defender.points);
+                console.log("char 1 fired;");
+                if(defender.points < 0){
+                    $("#char_1").remove();
+                    $("#game-state").html("<h3>You defeated " + defender.name + ", you can choose to fight another enemy. </h3>");
+                    defenderLives++;
+                }
+            }
+
+            if(defender.name === $("#char_2").attr("data-character")){
+                $("#char_2 .points").html(defender.points);
+                console.log("char 2 fired;");
+                if(defender.points < 0){
+                    $("#char_2").remove();
+                    $("#game-state").html("<h3>You defeated " + defender.name + ", you can choose to fight another enemy. </h3>");
+                    defenderLives++;
+                }
+            }
+
+            if(defender.name === $("#char_3").attr("data-character")){
+                $("#char_3 .points").html(defender.points);
+                console.log("char 3 fired;");
+                if(defender.points < 0){
+                    $("#char_3").remove();
+                    $("#game-state").html("<h3>You defeated " + defender.name + ", you can choose to fight another enemy. </h3>");
+                    defenderLives++;
+                }
+            }
+
+            if(defender.name === $("#char_4").attr("data-character")){
+                $("#char_4 .points").html(defender.points);
+                console.log("char 4 fired;");
+                if(defender.points < 0){
+                    $("#char_4").remove();
+                    $("#game-state").html("<h3>You defeated " + defender.name + ", you can choose to fight another enemy. </h3>"); 
+                    defenderLives++;                  
+                }                
+            }
+        
+
+        })
+    })    
+   
+    $("#end").on("click", function(){
+    	location.reload();
+    })
 
 </script>
 </body>
